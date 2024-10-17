@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import sirius.schedule.api.ScheduleApi
 import sirius.schedule.api.ScheduleApiImpl
+import sirius.schedule.cache.ScheduleCache
 import sirius.schedule.core.models.Group
 import sirius.schedule.presentation.MainScreen
 import sirius.schedule.presentation.MainScreenViewModel
@@ -20,7 +22,8 @@ import sirius.schedule.ui.theme.SiriusScheduleTheme
 
 val mainModule = module {
 	factory<ScheduleApi> { ScheduleApiImpl() }
-	factory<MainScreenViewModel> { MainScreenViewModel(get()) }
+	factory<ScheduleCache> { ScheduleCache(get()) }
+	factory<MainScreenViewModel> { MainScreenViewModel(get(), get()) }
 }
 
 class MainActivity : ComponentActivity() {
@@ -31,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
 		if (GlobalContext.getKoinApplicationOrNull() == null) {
 			startKoin {
+				androidContext(this@MainActivity)
 				modules(mainModule)
 			}
 		}

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sirius.schedule.api.ScheduleApi
+import sirius.schedule.cache.ScheduleCache
 import sirius.schedule.core.models.Group
 import sirius.schedule.core.models.WeeklySchedule
 
@@ -52,7 +53,8 @@ data class MainScreenVmState(
 }
 
 class MainScreenViewModel(
-	private val api: ScheduleApi
+	private val api: ScheduleApi,
+	private val cache: ScheduleCache
 ) : ViewModel() {
 	private val _state = MutableStateFlow(
 		MainScreenVmState()
@@ -67,6 +69,8 @@ class MainScreenViewModel(
 		)
 
 	fun load() {
+		val cachedGroup = cache.getGroup()
+
 		_state.update {
 			it.copy(
 				isLoading = true
@@ -76,23 +80,36 @@ class MainScreenViewModel(
 		viewModelScope.launch {
 			val groups = api.getGroups()
 
-			_state.value.currentGroup?.let { group ->
-				val schedule = api.getScheduleByGroup(group)
-
+			if (_state.value.currentGroup != null) {
+				_state.value.currentGroup?.let { group ->
+					loadScheduleByGroup(group)
+				}
+			} else if (cachedGroup != null) {
 				_state.update {
 					it.copy(
-						weeklySchedule = filterFromInvalidLessons(schedule),
-						isLoading = false
+						currentGroup = cachedGroup
 					)
 				}
+
+				loadScheduleByGroup(cachedGroup)
 			}
 
 			_state.update {
 				it.copy(
-					currentGroup = _state.value.currentGroup,
 					groups = groups,
 				)
 			}
+		}
+	}
+
+	private suspend fun loadScheduleByGroup(group: Group) {
+		val schedule = api.getScheduleByGroup(group)
+
+		_state.update {
+			it.copy(
+				weeklySchedule = filterFromInvalidLessons(schedule),
+				isLoading = false
+			)
 		}
 	}
 
@@ -116,6 +133,8 @@ class MainScreenViewModel(
 				currentGroup = newGroup
 			)
 		}
+
+		cache.saveGroup(newGroup)
 
 		load()
 	}
