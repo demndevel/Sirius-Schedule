@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.koin.compose.viewmodel.koinViewModel
+import java.time.DayOfWeek
 
 @Composable
 fun MainScreen(
@@ -58,6 +59,7 @@ fun MainScreen(
 
 				Column(Modifier.padding(innerPadding)) {
 					MainScreenSuccessState(
+						dayOfWeek = successState.dayOfWeek,
 						weeklySchedule = successState.weeklySchedule,
 						modifier = Modifier.fillMaxSize()
 					)

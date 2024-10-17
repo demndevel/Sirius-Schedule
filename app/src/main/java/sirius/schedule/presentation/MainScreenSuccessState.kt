@@ -36,8 +36,9 @@ import java.time.LocalTime
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreenSuccessState(
-	weeklySchedule: WeeklySchedule,
-	modifier: Modifier = Modifier
+	dayOfWeek: DayOfWeek,
+	modifier: Modifier = Modifier,
+	weeklySchedule: WeeklySchedule
 ) {
 	val pagerState = rememberPagerState(
 		initialPage = 0,
@@ -45,6 +46,12 @@ fun MainScreenSuccessState(
 	)
 	val daysOfWeekScrollLazyState = rememberLazyListState()
 	val coroutineScope = rememberCoroutineScope()
+
+	LaunchedEffect(Unit) {
+		coroutineScope.launch {
+			pagerState.scrollToPage(dayOfWeek.value - 1)
+		}
+	}
 
 	LaunchedEffect(pagerState.currentPage) {
 		daysOfWeekScrollLazyState
@@ -100,6 +107,8 @@ fun MainScreenSuccessState(
 @Composable
 fun MainScreenSuccessStatePreview() {
 	MainScreenSuccessState(
+		dayOfWeek = DayOfWeek.TUESDAY,
+		modifier = Modifier.fillMaxSize(),
 		weeklySchedule = WeeklySchedule(
 			Group("Some assy group code"),
 			listOf(
@@ -141,7 +150,6 @@ fun MainScreenSuccessStatePreview() {
 					)
 				)
 			)
-		),
-		modifier = Modifier.fillMaxSize()
+		)
 	)
 }

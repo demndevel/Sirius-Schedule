@@ -13,20 +13,25 @@ import sirius.schedule.api.ScheduleApi
 import sirius.schedule.cache.ScheduleCache
 import sirius.schedule.core.models.Group
 import sirius.schedule.core.models.WeeklySchedule
+import java.time.DayOfWeek
+import java.time.LocalDate
 
 interface MainScreenUiState {
 	val currentGroup: Group?
 	val groups: List<Group>
+	val dayOfWeek: DayOfWeek
 
 	data class Success(
 		override val currentGroup: Group?,
 		override val groups: List<Group>,
+		override val dayOfWeek: DayOfWeek,
 		val weeklySchedule: WeeklySchedule
 	) : MainScreenUiState
 
 	data class Loading(
 		override val currentGroup: Group?,
 		override val groups: List<Group>,
+		override val dayOfWeek: DayOfWeek,
 	) : MainScreenUiState
 }
 
@@ -34,19 +39,22 @@ data class MainScreenVmState(
 	val currentGroup: Group? = null,
 	val groups: List<Group> = emptyList(),
 	val weeklySchedule: WeeklySchedule? = null,
-	val isLoading: Boolean = false
+	val isLoading: Boolean = false,
+	val dayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
 ) {
 	fun toUiState(): MainScreenUiState {
 		if (!isLoading && weeklySchedule != null) {
 			return MainScreenUiState.Success(
 				currentGroup = currentGroup,
 				groups = groups,
-				weeklySchedule = weeklySchedule
+				weeklySchedule = weeklySchedule,
+				dayOfWeek = dayOfWeek
 			)
 		} else {
 			return MainScreenUiState.Loading(
 				currentGroup = currentGroup,
-				groups = groups
+				groups = groups,
+				dayOfWeek = dayOfWeek
 			)
 		}
 	}
@@ -65,7 +73,7 @@ class MainScreenViewModel(
 		.stateIn(
 			viewModelScope,
 			SharingStarted.Eagerly,
-			initialValue = MainScreenUiState.Loading(Group("Unspecified"), emptyList())
+			initialValue = MainScreenUiState.Loading(Group("Unspecified"), emptyList(), DayOfWeek.MONDAY)
 		)
 
 	fun load() {
@@ -73,7 +81,8 @@ class MainScreenViewModel(
 
 		_state.update {
 			it.copy(
-				isLoading = true
+				isLoading = true,
+				dayOfWeek = LocalDate.now().dayOfWeek
 			)
 		}
 

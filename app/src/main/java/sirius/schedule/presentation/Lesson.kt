@@ -28,7 +28,8 @@ fun Lesson(
 	modifier: Modifier = Modifier
 ) {
 	Card(
-		modifier = modifier,
+		modifier = modifier
+			.padding(horizontal = 8.dp),
 		colors = getLessonCardColorsByType(lesson.lessonType)
 	) {
 		Column(
