@@ -8,19 +8,18 @@ import kotlinx.serialization.json.Json
 import sirius.schedule.core.models.Group
 import sirius.schedule.core.models.WeeklySchedule
 
-class ScheduleApiImpl : ScheduleApi {
-	companion object {
-		const val apiUrl = "http://unit-lab.tech:8083"
-	}
-
+class ScheduleApiImpl(
+	private val apiUrl: String
+) : ScheduleApi {
 	private val json = Json {
 		ignoreUnknownKeys = true
 	}
 
 	private val httpClient = HttpClient(OkHttp)
 
+	// https://api.eralas.ru/api/groups
 	override suspend fun getGroups(): List<Group> {
-		val response = httpClient.get("$apiUrl/groups/get")
+		val response = httpClient.get("$apiUrl/groups")
 
 		val body = response.bodyAsText()
 
@@ -29,12 +28,14 @@ class ScheduleApiImpl : ScheduleApi {
 		return result.map { Group(it) }
 	}
 
+	// https://api.eralas.ru/api/schedule?group=<НОМЕР ГРУППЫ>&week=<НЕДЕЛЯ>
+	// https://api.eralas.ru/api/schedule?group=<НОМЕР ГРУППЫ>
 	override suspend fun getScheduleByGroup(group: Group): WeeklySchedule {
-		val response = httpClient.get("$apiUrl/schedule/get?group=${group.code}")
+		val response = httpClient.get("$apiUrl/schedule?group=${group.code}")
 		val body = response.bodyAsText()
 
-		val result = json.decodeFromString<SerializableSchedule>(body)
+		val result = json.decodeFromString<List<ScheduleItem>>(body)
 
-		return result.toWeeklySchedule()
+		return result.toWeeklySchedule(group)
 	}
 }

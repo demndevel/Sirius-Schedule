@@ -21,7 +21,7 @@ import sirius.schedule.presentation.MainScreenViewModel
 import sirius.schedule.ui.theme.SiriusScheduleTheme
 
 val mainModule = module {
-	factory<ScheduleApi> { ScheduleApiImpl() }
+	factory<ScheduleApi> { ScheduleApiImpl("https://api.eralas.ru/api") }
 	factory<ScheduleCache> { ScheduleCache(get()) }
 	factory<MainScreenViewModel> { MainScreenViewModel(get(), get()) }
 }
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 			}
 		}
 
-		val api = ScheduleApiImpl()
+		val api = ScheduleApiImpl("https://api.eralas.ru/api")
 
 		lifecycleScope.launch {
 			val groups = api.getGroups()
