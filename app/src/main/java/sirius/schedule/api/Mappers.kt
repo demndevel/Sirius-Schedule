@@ -22,7 +22,7 @@ fun List<ScheduleItem>.toWeeklySchedule(group: Group): WeeklySchedule {
 		val localDate = LocalDate.parse(date, formatter)
 
 		DailySchedule(
-			dayOfWeek = localDate.dayOfWeek,
+			date = localDate,
 			lessons = domainLessons,
 		)
 	}

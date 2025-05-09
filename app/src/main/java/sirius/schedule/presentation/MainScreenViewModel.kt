@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import sirius.schedule.api.ScheduleApi
 import sirius.schedule.cache.ScheduleCache
+import sirius.schedule.cache.ScheduleCacheImpl
 import sirius.schedule.core.models.Group
 import sirius.schedule.core.models.WeeklySchedule
 import java.time.DayOfWeek
@@ -62,7 +63,7 @@ data class MainScreenVmState(
 
 class MainScreenViewModel(
 	private val api: ScheduleApi,
-	private val cache: ScheduleCache
+	private val cache: ScheduleCache,
 ) : ViewModel() {
 	private val _state = MutableStateFlow(
 		MainScreenVmState()

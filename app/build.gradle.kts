@@ -52,6 +52,9 @@ dependencies {
 	implementation(libs.androidx.ui.tooling.preview)
 	implementation(libs.androidx.material3)
 
+	implementation(libs.androidx.glance.appwidget)
+	implementation(libs.androidx.glance.material3)
+
 	implementation(platform(libs.koin.bom))
 	implementation(libs.koin.core)
 	implementation(libs.koin.android)
@@ -64,6 +67,7 @@ dependencies {
 	implementation(libs.kotlinx.serialization.json)
 
 	testImplementation(libs.junit)
+	testImplementation(libs.kotlinx.coroutines.test)
 
 	androidTestImplementation(libs.androidx.junit)
 	androidTestImplementation(libs.androidx.espresso.core)

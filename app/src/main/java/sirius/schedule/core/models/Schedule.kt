@@ -1,6 +1,7 @@
 package sirius.schedule.core.models
 
 import java.time.DayOfWeek
+import java.time.LocalDate
 
 data class WeeklySchedule(
 	val group: Group,
@@ -8,6 +9,6 @@ data class WeeklySchedule(
 )
 
 data class DailySchedule(
-	val dayOfWeek: DayOfWeek,
-	val lessons: List<Lesson>
+	val date: LocalDate,
+	val lessons: List<Lesson>,
 )

@@ -15,14 +15,17 @@ import org.koin.dsl.module
 import sirius.schedule.api.ScheduleApi
 import sirius.schedule.api.ScheduleApiImpl
 import sirius.schedule.cache.ScheduleCache
+import sirius.schedule.cache.ScheduleCacheImpl
 import sirius.schedule.core.models.Group
 import sirius.schedule.presentation.MainScreen
 import sirius.schedule.presentation.MainScreenViewModel
 import sirius.schedule.ui.theme.SiriusScheduleTheme
+import sirius.schedule.usecase.GetClosestLessonUseCase
 
 val mainModule = module {
 	factory<ScheduleApi> { ScheduleApiImpl("https://api.eralas.ru/api") }
-	factory<ScheduleCache> { ScheduleCache(get()) }
+	factory<GetClosestLessonUseCase> { GetClosestLessonUseCase(get(), get()) }
+	factory<ScheduleCache> { ScheduleCacheImpl(get()) }
 	factory<MainScreenViewModel> { MainScreenViewModel(get(), get()) }
 }
 
@@ -40,25 +43,6 @@ class MainActivity : ComponentActivity() {
 		}
 
 		val api = ScheduleApiImpl("https://api.eralas.ru/api")
-
-		lifecycleScope.launch {
-			val groups = api.getGroups()
-			val schedule = api.getScheduleByGroup(Group("К0609-23"))
-			println(schedule.group)
-			schedule.days.forEach {
-				println(it.dayOfWeek)
-				println("lessons:")
-
-				it.lessons.forEach { lesson ->
-					println(lesson.lessonName)
-					println(lesson.lessonType)
-					println(lesson.auditory)
-					println(lesson.startTime)
-					println(lesson.endTime)
-					println(lesson.teacher)
-				}
-			}
-		}
 
 		setContent {
 			SiriusScheduleTheme {

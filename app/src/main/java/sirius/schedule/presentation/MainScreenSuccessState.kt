@@ -31,6 +31,7 @@ import sirius.schedule.core.models.WeeklySchedule
 import sirius.schedule.core.models.Lesson
 import sirius.schedule.core.models.DailySchedule
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -92,7 +93,7 @@ fun MainScreenSuccessState(
 			modifier = Modifier.weight(1f),
 		) { page ->
 			weeklySchedule.days.forEach { day ->
-				if (day.dayOfWeek.ordinal == page) {
+				if (day.date.dayOfWeek.ordinal == page) {
 					DailySchedule(
 						dailySchedule = day,
 						modifier = Modifier.fillMaxSize()
@@ -113,7 +114,7 @@ fun MainScreenSuccessStatePreview() {
 			Group("Some assy group code"),
 			listOf(
 				DailySchedule(
-					dayOfWeek = DayOfWeek.MONDAY,
+					date = LocalDate.now().minusDays(2),
 					lessons = listOf(
 						Lesson(
 							startTime = LocalTime.of(9, 30),
@@ -147,7 +148,7 @@ fun MainScreenSuccessStatePreview() {
 							auditory = "K90",
 							teacher = "Golovin",
 						),
-					)
+					),
 				)
 			)
 		)
