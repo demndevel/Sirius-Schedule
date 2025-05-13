@@ -7,12 +7,12 @@ plugins {
 
 android {
 	namespace = "sirius.schedule"
-	compileSdk = 35
+	compileSdk = 36
 
 	defaultConfig {
 		applicationId = "sirius.schedule"
 		minSdk = 29
-		targetSdk = 34
+		targetSdk = 36
 		versionCode = 1
 		versionName = "1.0"
 
