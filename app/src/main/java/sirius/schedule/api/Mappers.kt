@@ -47,7 +47,7 @@ fun ScheduleItem.toLesson(): Lesson {
 	}
 
 	val auditoryInfo = buildString {
-		if (address.isNotBlank() && address != "Основной") {
+		if (address?.isNotBlank() == true && address != "Основной") {
 			append(address)
 			append(", ")
 		}
@@ -57,7 +57,7 @@ fun ScheduleItem.toLesson(): Lesson {
 	return Lesson(
 		startTime = parsedStartTime,
 		endTime = parsedEndTime,
-		lessonName = discipline,
+		lessonName = discipline ?: "N/A",
 		lessonType = lessonType,
 		auditory = auditoryInfo,
 		teacher = teacherName

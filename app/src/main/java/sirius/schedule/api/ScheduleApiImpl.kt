@@ -13,6 +13,7 @@ class ScheduleApiImpl(
 ) : ScheduleApi {
 	private val json = Json {
 		ignoreUnknownKeys = true
+		coerceInputValues = true
 	}
 
 	private val httpClient = HttpClient(OkHttp)
