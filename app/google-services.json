@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "267748686249",
+    "project_id": "sirius-schedule",
+    "storage_bucket": "sirius-schedule.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267748686249:android:341dada9851affe4402cb8",
+        "android_client_info": {
+          "package_name": "sirius.schedule"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcS-Um-98VRNyh81hO3N-XOGJeqIUfKXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
